@@ -1,0 +1,93 @@
+﻿@page "/"
+@rendermode InteractiveServer
+
+@using Syncfusion.Blazor.RichTextEditor
+@using Syncfusion.Blazor.SplitButtons
+
+<SfRichTextEditor @ref="RteObj" Width="100%">
+    <RichTextEditorToolbarSettings Items="@Tools">
+        <RichTextEditorCustomToolbarItems>
+            <RichTextEditorCustomToolbarItem Name="Templates">
+                <Template>
+                    <SfDropDownButton IconCss="e-icons e-add-notes" CssClass="e-tbar-btn e-rte-dropdown-btn" Items="@TemplateItems">
+                        <ChildContent>
+                            <DropDownButtonEvents ItemSelected="OnTemplateSelect"></DropDownButtonEvents>
+                        </ChildContent>
+                    </SfDropDownButton>
+                </Template>
+            </RichTextEditorCustomToolbarItem>
+        </RichTextEditorCustomToolbarItems>
+    </RichTextEditorToolbarSettings>
+</SfRichTextEditor>
+
+@code {
+    private SfRichTextEditor RteObj;
+
+    private List<ToolbarItemModel> Tools = new List<ToolbarItemModel>()
+    {
+        new ToolbarItemModel() { Command = ToolbarCommand.Bold },
+        new ToolbarItemModel() { Command = ToolbarCommand.Italic },
+        new ToolbarItemModel() { Command = ToolbarCommand.Underline },
+        new ToolbarItemModel() { Command = ToolbarCommand.StrikeThrough },
+        new ToolbarItemModel() { Command = ToolbarCommand.FontName },
+        new ToolbarItemModel() { Command = ToolbarCommand.FontSize },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.CreateLink },
+        new ToolbarItemModel() { Command = ToolbarCommand.Image },
+        new ToolbarItemModel() { Command = ToolbarCommand.CreateTable },
+        new ToolbarItemModel { Name = "Templates", TooltipText="Insert Template" },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.Formats },
+        new ToolbarItemModel() { Command = ToolbarCommand.Alignments },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.OrderedList },
+
+        new ToolbarItemModel() { Command = ToolbarCommand.UnorderedList },
+        new ToolbarItemModel() { Command = ToolbarCommand.Outdent },
+        new ToolbarItemModel() { Command = ToolbarCommand.Indent },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.FontColor },
+        new ToolbarItemModel() { Command = ToolbarCommand.BackgroundColor },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.SourceCode },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.Undo },
+        new ToolbarItemModel() { Command = ToolbarCommand.Redo }
+    };
+
+    private List<DropDownMenuItem> TemplateItems = new List<DropDownMenuItem>()
+    {
+        new DropDownMenuItem  { Text = "Company Letterhead", Id = "Letterhead" },
+        new DropDownMenuItem  { Text = "Meeting Agenda", Id = "Agenda" },
+        new DropDownMenuItem  { Text = "Projections table", Id = "Projections" },
+        new DropDownMenuItem  { Text = "Balance Sheet", Id = "BalanceSheet" },
+        new DropDownMenuItem { Text = "Invoice", Id = "Invoice" },
+        new DropDownMenuItem { Text = "Project Timeline", Id = "Timeline" },
+        new DropDownMenuItem { Text = "Action Plan", Id = "ActionPlan" },
+        new DropDownMenuItem { Text = "FAQ Section", Id = "FAQ" },
+        new DropDownMenuItem  { Text = "Signature", Id = "Signature" }
+    };
+
+    private Dictionary<string, string> Templates = new Dictionary<string, string>()
+    {
+        { "Signature", "<p>Best regards,<br><span style='font-size: 14pt;'><span style='font-family: Verdana, Geneva, sans-serif;'><strong>John Doe</strong></span></span><br><em>Senior Manager</em><br><strong>XYZ Corporation</strong> | <a href='mailto:john.doe@xyz.com'>john.doe@xyz.com</a></p>" },
+        { "Projections", "<table style='width: 75%;' class='e-rte-table'><tr><th>Quarter</th><th>Revenue</th><th>Expenses</th></tr><tr><td>Q1</td><td>$100,000</td><td>$80,000</td></tr><tr><td>Q2</td><td>$120,000</td><td>$90,000</td></tr></table>" },
+        { "BalanceSheet", "<table style='width: 75%;' class='e-rte-table'><tr><th>Assets</th><th>Amount</th></tr><tr><td>Cash</td><td>$50,000</td></tr><tr><td>Inventory</td><td>$30,000</td></tr><tr><th>Liabilities</th><th>Amount</th></tr><tr><td>Debt</td><td>$20,000</td></tr></table>" },
+        { "Letterhead", "<div style='text-align:center;'><h2>XYZ Corporation</h2><p>123 Business Ave, Suite 100<br/>New York, NY 10001<br/><a href='https://www.xyzcorp.com' target='_blank'>www.xyzcorp.com</a></p><hr/></div><br/>" },
+        { "Agenda", "<h3>Meeting Agenda</h3><ol><li>Welcome and Introductions</li><li>Review of Previous Minutes</li><li>New Business</li><li>Action Items</li></ol>" },
+        { "FAQ", "<h3>Frequently Asked Questions</h3><p><strong>Q: What is your return policy?</strong><br/>A: Returns are accepted within 30 days with a receipt.</p><p><strong>Q: Do you offer bulk discounts?</strong><br/>A: Yes, contact sales for details.</p>" },
+        { "Timeline", "<table style='width: 75%;' class='e-rte-table'><tr><th>Milestone</th><th>Date</th><th>Status</th></tr><tr><td>Project Kickoff</td><td>2025-05-01</td><td>Completed</td></tr><tr><td>Phase 1 Delivery</td><td>2025-06-15</td><td>In Progress</td></tr></table>" },
+        { "ActionPlan", "<h3>Action Plan</h3><ul><li><strong>Task 1</strong>: Finalize budget - Assigned to: Finance Team - Due: 2025-04-30</li><li><strong>Task 2</strong>: Launch marketing campaign - Assigned to: Marketing Team - Due: 2025-05-15</li></ul>" },
+         { "Invoice", "<table style='width: 75%;' class='e-rte-table'><tr><th>Item</th><th>Description</th><th>Quantity</th><th>Price</th></tr><tr><td>Item 1</td><td>Consulting Services</td><td>10</td><td>$100</td></tr><tr><td>Item 2</td><td>Software License</td><td>1</td><td>$500</td></tr><tr><th colspan='3'>Total</th><td>$1,500</td></tr></table>" },
+    };
+
+    private async Task OnTemplateSelect(MenuEventArgs args)
+    {
+        if (Templates.ContainsKey(args.Item.Id))
+        {
+            string templateContent = Templates[args.Item.Id];
+            await RteObj.ExecuteCommandAsync(CommandName.InsertHTML, templateContent);
+            await RteObj.FocusAsync();
+        }
+    }
+}

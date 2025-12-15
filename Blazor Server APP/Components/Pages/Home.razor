@@ -1,0 +1,119 @@
+﻿@page "/"
+
+<SfRichTextEditor @ref="RteObj" Width="100%">
+    <RichTextEditorToolbarSettings Items="@DefaultToolbarItems">
+        <RichTextEditorCustomToolbarItems>
+            <RichTextEditorCustomToolbarItem Name="ContentTemplates">
+                <Template>
+                    <SfDropDownButton IconCss="e-icons e-add-notes" CssClass="e-tbar-btn e-rte-dropdown-btn" Items="@CustomToolbarItems">
+                        <ChildContent>
+                            <DropDownButtonEvents ItemSelected="OnTemplateSelect"></DropDownButtonEvents>
+                        </ChildContent>
+                    </SfDropDownButton>
+                </Template>
+            </RichTextEditorCustomToolbarItem>
+        </RichTextEditorCustomToolbarItems>
+    </RichTextEditorToolbarSettings>
+    <p>
+        The <a href="https://www.syncfusion.com/blazor-components/blazor-wysiwyg-rich-text-editorRich">Text Editor</a>
+        component is a WYSIWYG (what you see is what you get) editor that provides the best user experience for creating
+        and updating content. Users can format their content using standard toolbar commands.
+    </p>
+</SfRichTextEditor>
+
+@code {
+    private SfRichTextEditor RteObj;
+    public List<ToolbarItemModel> DefaultToolbarItems = new List<ToolbarItemModel>()
+    {
+        new ToolbarItemModel() { Command = ToolbarCommand.Bold },
+        new ToolbarItemModel() { Command = ToolbarCommand.Italic },
+        new ToolbarItemModel() { Command = ToolbarCommand.Underline },
+        new ToolbarItemModel() { Command = ToolbarCommand.StrikeThrough },
+        new ToolbarItemModel() { Command = ToolbarCommand.FontName },
+        new ToolbarItemModel() { Command = ToolbarCommand.FontSize },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.CreateLink },
+        new ToolbarItemModel() { Command = ToolbarCommand.Image },
+        new ToolbarItemModel() { Command = ToolbarCommand.CreateTable },
+        new ToolbarItemModel() { Name = "ContentTemplates", TooltipText="Predefined Templates" },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.Formats },
+        new ToolbarItemModel() { Command = ToolbarCommand.Alignments },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.OrderedList },
+        new ToolbarItemModel() { Command = ToolbarCommand.UnorderedList },
+        new ToolbarItemModel() { Command = ToolbarCommand.Outdent },
+        new ToolbarItemModel() { Command = ToolbarCommand.Indent },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.FontColor },
+        new ToolbarItemModel() { Command = ToolbarCommand.BackgroundColor },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.SourceCode },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.Undo },
+        new ToolbarItemModel() { Command = ToolbarCommand.Redo }
+    };
+
+    public List<DropDownMenuItem> CustomToolbarItems = new List<DropDownMenuItem>()
+    {
+        new DropDownMenuItem { Text = "Signature (multi-line)", Id = "Signature" },
+        new DropDownMenuItem { Text = "Projections table", Id = "Projections" },
+        new DropDownMenuItem { Text = "Balance Sheet", Id = "BalanceSheet" },
+        new DropDownMenuItem { Text = "Company Letterhead", Id = "Letterhead" },
+        new DropDownMenuItem { Text = "Meeting Agenda", Id = "Agenda" }
+    };
+
+    public Dictionary<string, string> ContentTemplates = new Dictionary<string, string>()
+    {
+        {
+        "Signature",
+        "<p>Best regards,<br/>John Doe<br/>Senior Manager<br/>XYZ Corporation<br/>john.doe@xyz.com</p>"
+        },
+        {
+            "Projections",
+            "<table border='1' style='width:100%; border-collapse: collapse;'>" +
+                "<tr><th>Quarter</th><th>Revenue</th><th>Expenses</th></tr>" +
+                "<tr><td>Q1</td><td>$100,000</td><td>$80,000</td></tr>" +
+                "<tr><td>Q2</td><td>$120,000</td><td>$90,000</td></tr>" +
+            "</table>"
+        },
+        {
+            "BalanceSheet",
+            "<table border='1' style='width:100%; border-collapse: collapse;'>" +
+                "<tr><th>Assets</th><th>Amount</th></tr>" +
+                "<tr><td>Cash</td><td>$50,000</td></tr>" +
+                "<tr><td>Inventory</td><td>$30,000</td></tr>" +
+                "<tr><th>Liabilities</th><th>Amount</th></tr>" +
+                "<tr><td>Debt</td><td>$20,000</td></tr>" +
+            "</table>"
+        },
+        {
+            "Letterhead",
+            "<div style='text-align:center;'>" +
+                "<h2>XYZ Corporation</h2>" +
+                "<p>123 Business Ave, Suite 100<br/>New York, NY 10001<br/>www.xyzcorp.com</p>" +
+                "<hr/>" +
+            "</div>"
+        },
+        {
+            "Agenda",
+            "<h3>Meeting Agenda</h3>" +
+                "<ol>" +
+                    "<li>Welcome and Introductions</li>" +
+                    "<li>Review of Previous Minutes</li>" +
+                    "<li>New Business</li>" +
+                    "<li>Action Items</li>" +
+                "</ol>"
+        }
+    };
+
+    public async Task OnTemplateSelect ( MenuEventArgs args )
+    {
+        if (ContentTemplates.ContainsKey(args.Item.Id))
+        {
+            string templateContent = ContentTemplates[args.Item.Id];
+            await RteObj.ExecuteCommandAsync(CommandName.InsertHTML, templateContent);
+            await RteObj.FocusAsync();
+        }
+    }
+}
